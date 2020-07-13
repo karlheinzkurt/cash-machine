@@ -8,7 +8,15 @@
 				"$rustc"
 			],
 			"group": "build",
-			"label": "Rust: cargo build - cash-machine"
+			"label": "Rust: cargo build - cash-machine",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": false,
+				"clear": true
+			}
 		},
 		{
 			"type": "cargo",
@@ -17,7 +25,15 @@
 				"$rustc"
 			],
 			"group": "build",
-			"label": "Rust: cargo test - cash-machine"
+			"label": "Rust: cargo test - cash-machine",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": false,
+				"clear": true
+			}
 		}
 	],
 }
