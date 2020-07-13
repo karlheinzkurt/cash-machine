@@ -1,0 +1,7 @@
+[package]
+name = "handler"
+version = "0.1.0"
+authors = ["Sascha Lumma <s.lumma@gmail.com>"]
+
+[dependencies]
+  json = "0.12.4"
