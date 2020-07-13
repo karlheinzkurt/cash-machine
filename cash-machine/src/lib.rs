@@ -16,8 +16,12 @@ fn handle_test() {
     let request = serde_json::json!({"amount": 23 });
     let result: serde_json::Value = serde_json::from_str(&handle(request.to_string())).unwrap();
     let notes = &result["notes"];
+    assert!(notes["100"].is_null());
+    assert!(notes["50"].is_null());
     assert_eq!(1, notes["20"]);
-    assert_eq!(4, notes["5"]);
+    assert!(notes["10"].is_null());
+    assert!(notes["5"].is_null());
     assert_eq!(1, notes["2"]);
     assert_eq!(1, notes["1"]);
+    assert!(notes[""].is_null());
 }
