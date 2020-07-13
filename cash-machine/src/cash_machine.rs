@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::fmt;
 
 #[derive(Debug)]
@@ -20,13 +21,31 @@ impl CashMachine {
     return CashMachine { notes: notes };
   }
 
-  pub fn get(&self, amount: u32) -> Result<u32, CashMachineError> {
-    return Ok(self.notes.iter().fold(amount, |value, note| {
-      let count = std::cmp::min(value / note, u32::MAX);
-      let residual = value - note * count;
-      println!("Print {} notes of amount {}", count, note);
-      return residual;
-    }));
+  pub fn get(&self, amount: u32) -> Result<HashMap<u32, u32>, CashMachineError> {
+    let mut result = HashMap::new();
+    let residual = self.notes.iter().fold(amount, |value, note| {
+      if amount == 0 {
+        // Nothing to do here since the amount of requested money is 0
+        return amount;
+      }
+      let count = std::cmp::min(value / note, std::u32::MAX);
+      if count == 0 {
+        // This note type is not part of the result set
+        return amount;
+      }
+      result.insert(*note, count);
+      return value - note * count;
+    });
+    if residual == 0 {
+      // We were able to to split the requested amount of money to available notes
+      return Ok(result);
+    }
+    return Err(CashMachineError {
+      message: format!(
+        "Unable to distribute requested amount {} to available notes (todo: print available notes)",
+        amount
+      ),
+    });
   }
 }
 

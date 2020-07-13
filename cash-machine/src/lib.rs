@@ -1,23 +1,23 @@
 mod cash_machine;
 
 use cash_machine::CashMachine;
-use std::collections::HashMap;
-use std::error::Error;
-use std::ops::Index;
 
-pub fn handle(request: String) -> String {
+pub fn handle(json_request: String) -> String {
+    let request: serde_json::Value = serde_json::from_str(&json_request).unwrap();
+    let amount = request["amount"].as_u64().unwrap() as u32;
     let atm = CashMachine::create(vec![100, 50, 20, 10, 5, 2, 1]);
-    return format!("{}", atm.get(request.parse().unwrap()).unwrap());
+    let notes = atm.get(amount).unwrap();
+    let result = serde_json::json!({ "notes": &notes }).to_string();
+    return result;
 }
 
 #[test]
 fn handle_test() {
-    assert_eq!("0", handle(String::from("23")));
-}
-
-#[test]
-fn map_test() {
-    let mut map = HashMap::new();
-    map.insert(String::from("key"), 50);
-    assert_eq!(&50, map.get("key").unwrap());
+    let request = serde_json::json!({"amount": 23 });
+    let result: serde_json::Value = serde_json::from_str(&handle(request.to_string())).unwrap();
+    let notes = &result["notes"];
+    assert_eq!(1, notes["20"]);
+    assert_eq!(4, notes["5"]);
+    assert_eq!(1, notes["2"]);
+    assert_eq!(1, notes["1"]);
 }

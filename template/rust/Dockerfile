@@ -1,23 +1,25 @@
-FROM openfaas/classic-watchdog:0.18.0 as watchdog
+FROM alpine:latest as build
+RUN apk update \
+    && apk add --no-cache rust cargo
 
-FROM rust:1.37-slim-stretch as build
+COPY function /function
+COPY main /main
 
-COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
-RUN chmod +x /usr/bin/fwatchdog
+RUN cd /main && cargo build --release 
 
-RUN apt-get update -qy \
-    && apt-get install -qy curl ca-certificates
+FROM alpine:latest
+
+RUN apk update \
+    && apk add --no-cache libgcc curl ca-certificates \
+    && curl -sL https://github.com/openfaas/faas/releases/download/0.18.17/fwatchdog > /usr/bin/fwatchdog \
+    && chmod +x /usr/bin/fwatchdog
 
 WORKDIR /usr/src/openfaas
 
-COPY function ./function
-COPY main ./main
-
-RUN cargo install --path ./main
+COPY --from=build /main/target/release/main main
 
 HEALTHCHECK --interval=5s CMD [ -e /tmp/.lock ] || exit 1
 
 ENV fprocess="main"
 
-CMD ["fwatchdog"]
-
+ENTRYPOINT ["fwatchdog"]

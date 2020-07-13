@@ -6,4 +6,4 @@ functions:
   cash-machine:
     lang: rust
     handler: ./cash-machine
-    image: cash-machine:latest
+    image: karlheinzkurt/cash-machine:latest
