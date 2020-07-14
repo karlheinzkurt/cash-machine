@@ -8,7 +8,7 @@ pub struct CashMachineError {
 
 impl fmt::Display for CashMachineError {
   fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-    return write!(f, "CashMachineError({})", self.message);
+    return write!(f, "{}", self.message);
   }
 }
 
@@ -80,7 +80,7 @@ fn unable_to_distribute_test() {
 #[test]
 fn format_error_test() {
   assert_eq!(
-    String::from("CashMachineError(bad)"),
+    String::from("bad"),
     format!(
       "{}",
       CashMachineError {

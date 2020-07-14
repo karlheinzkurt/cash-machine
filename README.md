@@ -25,7 +25,8 @@ docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t karlheinz
 popd
 ```
 
-Deploy function to local cluster.
+Deploy function to local cluster, while 192.168.23.10 is the IPv4 of my local cluster and
+should be changed properly.
 ```
 export OPENFAAS_URL=http://192.168.23.10:31112
 faas-cli deploy -f cash-machine.yml
@@ -46,6 +47,13 @@ curl -s http://192.168.23.10:31112/function/cash-machine -d '{"amount":188}' | j
    }
 }
 ```
+
+# TODOs
+- Make error handling RFC7807 conform: https://tools.ietf.org/html/rfc7807
+- To avoid forking the process for each request: https://github.com/openfaas-incubator/of-watchdog/blob/master/README.md
+
+# OpenFaaS helper
+- https://docs.openfaas.com/deployment/troubleshooting/
 
 # k3s helper
 Clean-up docker images
