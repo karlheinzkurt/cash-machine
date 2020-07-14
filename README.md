@@ -1,3 +1,5 @@
+![Rust](https://github.com/karlheinzkurt/cash-machine/workflows/Rust/badge.svg)
+
 # Motivation
 Just a playground project to explore the Rust programming language and OpenFaaS. Since I'm 
 quite used to C++, I wanted to find out the advantages of Rust. Furthermore, I'm 
