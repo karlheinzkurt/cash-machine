@@ -9,9 +9,6 @@ on:
 jobs:
   buildx:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: cash-machine
         
     steps:
       - uses: actions/checkout@v2
@@ -38,10 +35,9 @@ jobs:
             --password-stdin
           
       - name: Run Buildx
+        working-directory: build/cash-machine
         run: docker buildx build \
             --platform linux/amd64,linux/arm64,linux/arm/v7 \
             -t karlheinzkurt/cash-machine:latest \
-            --file build/cash-machine/Dockerfile \
             --push
-            build/cash-machine
-            
+            .
