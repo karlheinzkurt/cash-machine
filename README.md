@@ -1,5 +1,5 @@
-![build](https://github.com/karlheinzkurt/cash-machine/workflows/Rust/badge.svg)
-![docker](https://github.com/karlheinzkurt/cash-machine/workflows/buildx/badge.svg)
+![build](https://github.com/karlheinzkurt/cash-machine/workflows/build/badge.svg)
+![docker](https://github.com/karlheinzkurt/cash-machine/workflows/docker/badge.svg)
 
 # Motivation
 Just a playground project to explore the Rust programming language and OpenFaaS. Since I'm 
