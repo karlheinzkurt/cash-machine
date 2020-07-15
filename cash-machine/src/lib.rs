@@ -2,8 +2,9 @@ mod cash_machine;
 
 use cash_machine::CashMachine;
 use serde::Serialize;
+use std::panic;
 
-// Partially
+// Oriented to RFC7807
 #[derive(Serialize)]
 pub struct JsonError {
     title: String,
@@ -16,6 +17,10 @@ impl JsonError {
         serde_json::json!(self).to_string()
     }
 }
+
+//panic::set_hook(Box::new(|_| {
+//    println!("Custom panic hook");
+//}));
 
 pub fn handle(json_request: String) -> String {
     let request: serde_json::Value = serde_json::from_str(&json_request).unwrap_or_else(|error| {

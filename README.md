@@ -16,9 +16,10 @@ Takes an amount of money as an argument and calculates the notes to be paid out 
 - https://www.docker.com/blog/multi-arch-images/
 
 # Deploy to local k8s cluster hosting OpenFaaS and running on RasberryPis
+Since multi-platform builds are not yet supported right now (https://github.com/openfaas/faas-cli/issues/770), we have to build and deploy the function in multiple steps.
 Build image locally to ensure faas-cli copies the template stuff to the right places.
 ```
-faas-cli build -f cash-machine.yml
+faas-cli build --shrinkwrap -f cash-machine.yml
 ```
 
 Build images for amd64, arm64, arm/v7 and push them.
