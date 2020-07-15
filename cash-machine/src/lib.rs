@@ -6,13 +6,13 @@ use std::panic;
 
 // Oriented to RFC7807
 #[derive(Serialize)]
-pub struct JsonError {
+pub struct ProblemDetail {
     title: String,
     detail: String,
     status: u32,
 }
 
-impl JsonError {
+impl ProblemDetail {
     fn to_string(&self) -> String {
         serde_json::json!(self).to_string()
     }
@@ -24,7 +24,7 @@ impl JsonError {
 
 pub fn handle(json_request: String) -> String {
     let request: serde_json::Value = serde_json::from_str(&json_request).unwrap_or_else(|error| {
-        panic!(JsonError {
+        panic!(ProblemDetail {
             title: String::from("Invalid json"),
             detail: format!(
                 "Parsing incoming json failed with: {}: {}",
@@ -36,7 +36,7 @@ pub fn handle(json_request: String) -> String {
     });
 
     let amount = request["amount"].as_u64().unwrap_or_else(|| {
-        panic!(JsonError {
+        panic!(ProblemDetail {
             title: String::from("Not a number"),
             detail: format!(
                 "Converting 'amount' to unsigned integer failed: {}",
@@ -49,7 +49,7 @@ pub fn handle(json_request: String) -> String {
 
     let atm = CashMachine::create(vec![100, 50, 20, 10, 5, 2]);
     let notes = atm.get(amount).unwrap_or_else(|error| {
-        panic!(JsonError {
+        panic!(ProblemDetail {
             title: String::from("Processing failed"),
             detail: format!("Could not perform requested operation: {}", error),
             status: 500
