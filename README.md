@@ -1,4 +1,4 @@
-![Rust](https://github.com/karlheinzkurt/cash-machine/workflows/Rust/badge.svg)
+![build](https://github.com/karlheinzkurt/cash-machine/workflows/Rust/badge.svg)
 
 # Motivation
 Just a playground project to explore the Rust programming language and OpenFaaS. Since I'm 
