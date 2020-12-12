@@ -4,20 +4,6 @@ use cash_machine::CashMachine;
 use serde::Serialize;
 use std::panic;
 
-// Oriented to RFC7807
-#[derive(Serialize)]
-pub struct ProblemDetail {
-    title: String,
-    detail: String,
-    status: u32,
-}
-
-impl ProblemDetail {
-    fn to_string(&self) -> String {
-        serde_json::json!(self).to_string()
-    }
-}
-
 //panic::set_hook(Box::new(|_| {
 //    println!("Custom panic hook");
 //}));
@@ -47,7 +33,7 @@ pub fn handle(json_request: String) -> String {
         .to_string());
     }) as u32;
 
-    let atm = CashMachine::create(vec![100, 50, 20, 10, 5, 2]);
+    let atm = CashMachine::create(vec![100, 50, 20, 10, 5, 2, 1]);
     let notes = atm.get(amount).unwrap_or_else(|error| {
         panic!(ProblemDetail {
             title: String::from("Processing failed"),
@@ -60,10 +46,22 @@ pub fn handle(json_request: String) -> String {
     return serde_json::json!({ "notes": &notes }).to_string();
 }
 
+// Oriented to RFC7807
+#[derive(Serialize)]
+pub struct ProblemDetail {
+    title: String,
+    detail: String,
+    status: u32,
+}
+
+impl ProblemDetail {
+    fn to_string(&self) -> String {
+        serde_json::json!(self).to_string()
+    }
+}
+
+// Tests
 #[test]
-#[should_panic(
-    expected = "{\"detail\":\"Could not perform requested operation: Unable to split amount 23 to available notes [100, 50, 20, 10, 5, 2]\",\"status\":500,\"title\":\"Processing failed\"}"
-)]
 fn handle_invalid_split_test() {
     handle(serde_json::json!({"amount": 23}).to_string());
 }
@@ -86,7 +84,7 @@ fn handle_invalid_json_test() {
 
 #[test]
 fn handle_valid_test() {
-    let request = serde_json::json!({"amount": 22 });
+    let request = serde_json::json!({"amount": 23 });
     let result: serde_json::Value = serde_json::from_str(&handle(request.to_string())).unwrap();
     let notes = &result["notes"];
     assert!(notes["100"].is_null());
@@ -95,5 +93,5 @@ fn handle_valid_test() {
     assert!(notes["10"].is_null());
     assert!(notes["5"].is_null());
     assert_eq!(1, notes["2"]);
-    assert!(notes[""].is_null());
+    assert_eq!(1, notes["1"]);
 }
