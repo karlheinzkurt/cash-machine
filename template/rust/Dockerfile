@@ -2,7 +2,7 @@
 # are named differently for different architectures, there is no 
 # straight forward and portable way to get the binary other than 
 # using the watchdog image as a source image. 
-FROM openfaas/classic-watchdog:0.18.17 as watchdog
+FROM openfaas/classic-watchdog:0.20.1 as watchdog
 
 # Since it's easier to build the container for another architecture
 # than to cross compile it locally, we are using this build container.
